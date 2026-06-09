@@ -4,22 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Langley & Villalobos Asesorías</title>
-    <!-- Tailwind CSS para diseño moderno y responsive -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Animaciones sutiles al hacer scroll -->
     <script src="https://unpkg.com/scrollreveal"></script>
     <script>
-        // Configuración oficial con tu paleta exacta de colores
+        // Configuración oficial con tu paleta exacta + soporte para Modo Oscuro nativo de Tailwind
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        'lyv-darkest': '#120907',   // Color 1: Negro cálido para contrastes y textos base
-                        'lyv-navy': '#12273c',      // Color 2: Azul institucional dominante (Fondos y Hero)
-                        'lyv-blue': '#125b7f',      // Color 3: Azul corporativo estructural
-                        'lyv-cyan': '#1f98c9',      // Color 4: Azul tecnológico / Interactividad
-                        'lyv-electric': '#20d5d8',  // Color 5: Turquesa eléctrico (Acentuación y botones clave)
-                        'lyv-bg-light': '#FDFCFC'   // Fondo base claro para máxima lectura
+                        'lyv-darkest': '#120907',   // Color 1
+                        'lyv-navy': '#12273c',      // Color 2
+                        'lyv-blue': '#125b7f',      // Color 3
+                        'lyv-cyan': '#1f98c9',      // Color 4
+                        'lyv-electric': '#20d5d8',  // Color 5
+                        'lyv-bg-light': '#FDFCFC'   // Fondo claro institucional
                     },
                     fontFamily: {
                         'roman': ['Times New Roman', 'Times', 'serif'],
@@ -29,45 +30,67 @@
         }
     </script>
     <style>
-        /* Efecto Glassmorphism moderno para el menú móvil usando tu base azul */
         .glass {
-            background: rgba(18, 39, 60, 0.95);
-            backdrop-filter: blur(6px);
+            background: rgba(18, 39, 60, 0.85);
+            backdrop-filter: blur(8px);
+        }
+        .dark .glass {
+            background: rgba(18, 9, 7, 0.9);
+            backdrop-filter: blur(8px);
         }
     </style>
 </head>
-<body class="bg-lyv-bg-light text-lyv-darkest font-sans antialiased">
+<body class="bg-lyv-bg-light text-lyv-darkest dark:bg-lyv-darkest dark:text-gray-100 font-sans antialiased transition-colors duration-300">
 
-    <!-- 1. HEADER & NAVIGATION (Menú corporativo con espacio para tu Logo LyV Romano) -->
-    <header class="fixed w-full top-0 z-50 bg-lyv-navy/95 backdrop-blur-md border-b border-lyv-blue/20 transition-all duration-300">
+    <!-- 1. HEADER & NAVIGATION (Con botón de modo oscuro arriba a la derecha) -->
+    <header class="fixed w-full top-0 z-50 bg-lyv-navy/95 dark:bg-lyv-darkest/95 backdrop-blur-md border-b border-lyv-blue/20 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
-            <!-- Contenedor optimizado para el Logo -->
+            <!-- Logo -->
             <a href="#" class="flex items-center space-x-2">
-                <!-- Tu isotipo LyV en tipografía romana con el acento eléctrico de la paleta -->
-                <span class="font-roman text-3xl font-bold tracking-wider text-lyv-electric">L<span class="text-sm font-sans font-light mx-0.5 text-white">&</span>V</span>
+                <span class="font-roman text-3xl font-bold tracking-wider text-lyv-electric">L<span class="text-sm font-sans font-light mx-0.5 text-white">&amp;V</span></span>
                 <div class="border-l border-lyv-blue/40 pl-3 hidden sm:block">
-                    <span class="text-xs uppercase tracking-widest block font-medium text-gray-300">Asesorías</span>
+                    <span class="text-xs uppercase tracking-widest block font-medium text-gray-300 dark:text-gray-400">Asesorías</span>
                 </div>
             </a>
 
-            <!-- Menú de navegación para Escritorio -->
-            <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-wider font-medium">
-                <a href="#inicio" class="text-white hover:text-lyv-electric transition-colors">Inicio</a>
-                <a href="#nosotros" class="text-gray-300 hover:text-lyv-electric transition-colors">Nosotros</a>
-                <a href="#servicios" class="text-gray-300 hover:text-lyv-electric transition-colors">Qué Hacemos</a>
-                <a href="#equipo" class="text-gray-300 hover:text-lyv-electric transition-colors">Quiénes Somos</a>
-                <!-- Botón de Acción Principal con el color turquesa destacado -->
-                <a href="#contacto" class="text-lyv-darkest bg-lyv-electric px-4 py-2 rounded shadow font-bold hover:bg-lyv-electric/90 hover:scale-105 transition-all">Contacto</a>
-            </nav>
+            <!-- Menú de navegación Escritorio + Controles -->
+            <div class="hidden md:flex items-center space-x-8">
+                <nav class="flex space-x-8 text-sm uppercase tracking-wider font-medium">
+                    <a href="#inicio" class="text-white hover:text-lyv-electric transition-colors">Inicio</a>
+                    <a href="#nosotros" class="text-gray-300 hover:text-lyv-electric transition-colors">Nosotros</a>
+                    <a href="#servicios" class="text-gray-300 hover:text-lyv-electric transition-colors">Qué Hacemos</a>
+                    <a href="#equipo" class="text-gray-300 hover:text-lyv-electric transition-colors">Quiénes Somos</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4 border-l border-lyv-blue/30 pl-6">
+                    <!-- BOTÓN INTERRUPTOR TEMA (Escritorio - Arriba a la derecha) -->
+                    <button id="theme-toggle" class="text-gray-300 hover:text-lyv-electric transition-colors focus:outline-none p-1.5" aria-label="Cambiar Tema">
+                        <!-- Icono Sol (se muestra en modo oscuro) -->
+                        <svg id="theme-toggle-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.243 17.657l.707.707M6.343 6.364l.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <!-- Icono Luna (se muestra en modo claro) -->
+                        <svg id="theme-toggle-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+                    </button>
 
-            <!-- Botón del Menú Hamburguesa para Móviles -->
-            <button id="menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none" aria-label="Abrir menú">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
+                    <a href="#contacto" class="text-lyv-darkest bg-lyv-electric px-4 py-2 rounded shadow text-sm uppercase tracking-wider font-bold hover:bg-lyv-electric/90 hover:scale-105 transition-all">Contacto</a>
+                </div>
+            </div>
+
+            <!-- Controles Móviles derecho -->
+            <div class="flex items-center space-x-4 md:hidden">
+                <!-- BOTÓN INTERRUPTOR TEMA (Móvil) -->
+                <button id="theme-toggle-mobile" class="text-gray-300 hover:text-white focus:outline-none p-1" aria-label="Cambiar Tema Móvil">
+                    <svg id="theme-toggle-sun-mobile" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.243 17.657l.707.707M6.343 6.364l.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <svg id="theme-toggle-moon-mobile" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+                </button>
+
+                <button id="menu-btn" class="text-gray-300 hover:text-white focus:outline-none" aria-label="Abrir menú">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
         </div>
 
-        <!-- Menú Desplegable para Celulares -->
+        <!-- Menú Móvil desplegable -->
         <div id="mobile-menu" class="hidden fixed inset-x-0 top-20 glass border-b border-lyv-blue/30 py-6 px-4 md:hidden">
             <nav class="flex flex-col space-y-4 text-center uppercase tracking-wider text-sm font-medium">
                 <a href="#inicio" class="text-white py-2">Inicio</a>
@@ -79,30 +102,32 @@
         </div>
     </header>
 
-    <!-- 2. HERO SECTION (Portada de alto impacto enfocada en el sector) -->
+    <!-- 2. HERO SECTION (Alta transparencia para lucir el bus y paisaje de fondo) -->
     <section id="inicio" class="relative bg-lyv-navy text-white min-h-screen flex items-center pt-20 overflow-hidden">
-        <!-- Imagen de fondo corporativa con overlay oscuro para asegurar lectura -->
-        <div class="absolute inset-0 opacity-20 object-cover mix-blend-multiply bg-center bg-cover" style="background-image: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=1200');"></div>
+        <!-- CAPA DE IMAGEN: Subida a opacity-75 para máxima nitidez del paisaje y bus -->
+        <div class="absolute inset-0 opacity-75 object-cover mix-blend-overlay bg-center bg-cover transition-all duration-500" style="background-image: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&amp;fit=crop&amp;q=80&amp;w=1200');"></div>
+        <!-- GRADIENTE DE PROTECCIÓN SUAVIZADO: Mantiene legibles los textos sobre la fotografía clara -->
+        <div class="absolute inset-0 bg-gradient-to-r from-lyv-navy/85 via-lyv-navy/40 to-lyv-navy/10 dark:from-lyv-darkest/95 dark:via-lyv-darkest/65 dark:to-transparent"></div>
         
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 z-10">
             <div class="max-w-3xl class-reveal-left">
-                <span class="text-lyv-electric uppercase tracking-widest font-bold text-xs sm:text-sm block mb-3">Especialistas en transporte público regional</span>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight">
+                <span class="text-lyv-electric uppercase tracking-widest font-bold text-xs sm:text-sm block mb-3 drop-shadow-md">Especialistas en transporte público regional</span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight drop-shadow-lg">
                     Planificación, Regulación y Futuro para el Transporte Regional.
                 </h1>
-                <p class="text-base sm:text-xl text-gray-300 mb-10 leading-relaxed font-light">
-                    Somos una consultora boutique enfocada en  el diseño, implementación y seguimiento de proyectos estratégicos de movilidad en Chile. Nos centramos en la planificación operativa, regulación y la transición hacia la electromovilidad.
+                <p class="text-base sm:text-xl text-gray-100 mb-10 leading-relaxed font-light drop-shadow-md">
+                    Somos una consultora boutique enfocada en el diseño, implementación y seguimiento de proyectos estratégicos de movilidad en Chile. Nos centramos en la planificación operativa, regulación y la transición hacia la electromovilidad.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="#servicios" class="bg-lyv-electric text-lyv-darkest font-bold text-center px-8 py-4 rounded shadow-lg hover:bg-lyv-electric/90 hover:scale-105 transition-all uppercase tracking-wider text-sm">Nuestros Servicios</a>
-                    <a href="#contacto" class="border border-lyv-cyan text-lyv-cyan hover:bg-lyv-cyan/10 text-center font-semibold px-8 py-4 rounded transition-all uppercase tracking-wider text-sm">Contactar un Asesor</a>
+                    <a href="#contacto" class="border border-lyv-electric text-lyv-electric hover:bg-lyv-electric/10 text-center font-semibold px-8 py-4 rounded transition-all uppercase tracking-wider text-sm">Contactar un Asesor</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. INDICADORES (Sección moderna basada en datos numéricos) -->
-    <section class="bg-lyv-darkest text-white border-t border-lyv-blue/20 py-12">
+    <!-- 3. INDICADORES -->
+    <section class="bg-lyv-darkest text-white border-t border-lyv-blue/20 py-12 dark:bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center class-reveal-bottom">
                 <div class="p-4">
@@ -121,154 +146,149 @@
         </div>
     </section>
 
-    <!-- 4. SOBRE NOSOTROS (Introducción y Fotografía Analítica) -->
+    <!-- 4. SOBRE NOSOTROS -->
     <section id="nosotros" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="class-reveal-left">
-                <span class="text-lyv-blue uppercase tracking-widest font-bold text-xs block mb-2">Compromiso con la Excelencia</span>
-                <h2 class="text-3xl font-bold text-lyv-navy mb-6">Asesoría estratégica integral de punta a punta</h2>
-                <p class="text-lyv-darkest/80 mb-6 leading-relaxed font-light">
+                <span class="text-lyv-blue dark:text-lyv-cyan uppercase tracking-widest font-bold text-xs block mb-2">Compromiso con la Excelencia</span>
+                <h2 class="text-3xl font-bold text-lyv-navy dark:text-white mb-6">Asesoría estratégica integral de punta a punta</h2>
+                <p class="text-lyv-darkest/80 dark:text-gray-300 mb-6 leading-relaxed font-light">
                     Acompañamos a operadores y actores clave de la industria en la toma de decisiones críticas mediante soluciones de alto nivel técnico, regulatorio y financiero. Nuestro objetivo central es asegurar el cumplimiento normativo ante el Ministerio y optimizar la rentabilidad del servicio.
                 </p>
-                <p class="text-lyv-darkest/80 leading-relaxed font-light">
+                <p class="text-lyv-darkest/80 dark:text-gray-300 leading-relaxed font-light">
                     Abarcamos desde la modelación de planes operacionales complejos hasta la estructuración contractual de proyectos licitados. Aportamos una mirada técnica rigurosa y actualizada según las últimas normativas vigentes del MTT.
                 </p>
             </div>
-            <!-- Fotografía representativa del manejo de datos de transporte -->
             <div class="relative h-64 sm:h-80 rounded-lg overflow-hidden shadow-xl border border-lyv-blue/10 class-reveal-right">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" alt="Análisis de Datos Operacionales" class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Análisis de Datos" class="w-full h-full object-cover">
             </div>
         </div>
     </section>
 
-    <!-- 5. QUÉ HACEMOS (Grid de Servicios con Tarjetas e Interactividad Modernas) -->
-    <section id="servicios" class="bg-gradient-to-b from-gray-50 to-gray-100 py-24 border-y border-gray-200/50">
+    <!-- 5. QUÉ HACEMOS -->
+    <section id="servicios" class="bg-gray-50 dark:bg-lyv-navy/20 py-24 border-y border-gray-200/50 dark:border-lyv-blue/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 class-reveal-bottom">
-                <h2 class="text-3xl font-bold text-lyv-navy mb-4">Nuestros Servicios Especializados</h2>
-                <p class="text-gray-600 font-light">Soluciones multidisciplinarias adaptadas con precisión al ecosistema regulatorio y tecnológico del transporte público chileno.</p>
+                <h2 class="text-3xl font-bold text-lyv-navy dark:text-white mb-4">Nuestros Servicios Especializados</h2>
+                <p class="text-gray-600 dark:text-gray-400 font-light">Soluciones multidisciplinarias adaptadas con precisión al ecosistema regulatorio y tecnológico del transporte público chileno.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Tarjeta de Servicio 1 -->
-                <div class="bg-white p-8 rounded-lg shadow-sm border-t-4 border-lyv-blue hover:shadow-md hover:-translate-y-1 transition-all duration-300 class-reveal-bottom">
-                    <div class="text-lyv-blue mb-6">
+                <div class="bg-white dark:bg-lyv-navy/40 p-8 rounded-lg shadow-sm border-t-4 border-lyv-blue hover:shadow-md hover:-translate-y-1 transition-all duration-300 class-reveal-bottom">
+                    <div class="text-lyv-blue dark:text-lyv-cyan mb-6">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-lyv-navy mb-4">Asesoría Técnico Operacional</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed font-light">
-                        Planificación avanzada de servicios, modelamiento operacional y estricto control de cumplimiento ante la DTPR. Coordinación de punta a cabo con proveedores tecnológicos para asegurar la calidad de la información GPS y de validadores exigidos.
+                    <h3 class="text-xl font-bold text-lyv-navy dark:text-white mb-4">Asesoría Técnico Operacional</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                        Planificación avanzada de servicios, modelamiento operacional y estricto control de cumplimiento ante la DTPR. Coordinación fina con proveedores tecnológicos (GPS, validadores).
                     </p>
                 </div>
 
-                <!-- Tarjeta de Servicio 2 -->
-                <div class="bg-white p-8 rounded-lg shadow-sm border-t-4 border-lyv-cyan hover:shadow-md hover:-translate-y-1 transition-all duration-300 class-reveal-bottom" style="transition-delay: 100ms;">
+                <div class="bg-white dark:bg-lyv-navy/40 p-8 rounded-lg shadow-sm border-t-4 border-lyv-cyan hover:shadow-md hover:-translate-y-1 transition-all duration-300 class-reveal-bottom" style="transition-delay: 100ms;">
                     <div class="text-lyv-cyan mb-6">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-lyv-navy mb-4">Licitaciones Públicas</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed font-light">
-                        Preparación integral de ofertas técnicas, administrativas y financieras para procesos del MTT. Diseño estratégico enfocado en la provisión de flotas modernas bajo el estándar de electromovilidad regional.
+                    <h3 class="text-xl font-bold text-lyv-navy dark:text-white mb-4">Licitaciones Públicas</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                        Preparación integral de ofertas técnicas, administrativas y financieras para procesos del MTT. Diseño estratégico enfocado en provisión de flotas bajo el estándar de electromovilidad.
                     </p>
                 </div>
 
-                <!-- Tarjeta de Servicio 3 -->
-                <div class="bg-white p-8 rounded-lg shadow-sm border-t-4 border-lyv-darkest hover:shadow-md hover:-translate-y-1 transition-all duration-300 class-reveal-bottom" style="transition-delay: 200ms;">
-                    <div class="text-lyv-darkest mb-6">
+                <div class="bg-white dark:bg-lyv-navy/40 p-8 rounded-lg shadow-sm border-t-4 border-lyv-darkest dark:border-lyv-electric hover:shadow-md hover:-translate-y-1 transition-all duration-300 class-reveal-bottom" style="transition-delay: 200ms;">
+                    <div class="text-lyv-darkest dark:text-lyv-electric mb-6">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-lyv-navy mb-4">Estudios Especializados</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed font-light">
-                        Elaboración de análisis predictivos, informes financieros y jurídicos. Evaluación pormenorizada del equilibrio económico de contratos estatales, reajustes tarifarios y justificaciones técnicas fundadas de trazados.
+                    <h3 class="text-xl font-bold text-lyv-navy dark:text-white mb-4">Estudios Especializados</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                        Elaboración de análisis predictivos, informes financieros y jurídicos. Evaluación pormenorizada del equilibrio económico de contratos estatales y reajustes tarifarios.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 6. QUIÉNES SOMOS (Equipo Consultor con Tarjetas y Enlace a Redes) -->
+    <!-- 6. QUIÉNES SOMOS -->
     <section id="equipo" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-20 class-reveal-bottom">
             <span class="text-lyv-cyan uppercase tracking-widest font-bold text-xs block mb-2">Especialistas de Primer Nivel</span>
-            <h2 class="text-3xl font-bold text-lyv-navy mb-4">Equipo Consultor</h2>
-            <p class="text-gray-600 font-light">Directivos con probada experiencia y liderazgo en la División de Transporte Público Regional (DTPR) del MTT.</p>
+            <h2 class="text-3xl font-bold text-lyv-navy dark:text-white mb-4">Equipo Consultor</h2>
+            <p class="text-gray-600 dark:text-gray-400 font-light">Directivos con probada experiencia y liderazgo en la División de Transporte Público Regional (DTPR) del MTT.</p>
         </div>
 
         <div class="space-y-12">
-            <!-- Consultor 1 -->
-            <div class="flex flex-col lg:flex-row gap-8 items-center bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all class-reveal-left">
+            <!-- Socio 1 -->
+            <div class="flex flex-col lg:flex-row gap-8 items-center bg-white dark:bg-lyv-navy/20 p-6 sm:p-8 rounded-xl border border-gray-100 dark:border-lyv-blue/10 shadow-sm class-reveal-left">
                 <div class="w-40 h-40 sm:w-44 sm:h-44 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Roberto Villalobos" class="w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="Roberto Villalobos" class="w-full h-full object-cover">
                 </div>
                 <div class="w-full">
                     <div class="flex items-center justify-between mb-1">
-                        <h3 class="text-2xl font-bold text-lyv-navy">Roberto Villalobos Román-Mienert</h3>
-                        <a href="#" class="text-lyv-blue hover:text-lyv-cyan transition-colors ml-4" aria-label="LinkedIn">
+                        <h3 class="text-2xl font-bold text-lyv-navy dark:text-white">Roberto Villalobos Román-Mienert</h3>
+                        <a href="#" class="text-lyv-blue hover:text-lyv-cyan dark:text-lyv-cyan transition-colors ml-4">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                         </a>
                     </div>
-                    <p class="text-xs font-bold text-lyv-cyan uppercase tracking-wider mb-4">Socio Asesor — Regulación & Subsidios</p>
-                    <p class="text-xs text-gray-400 mb-4 font-mono">Ingeniero Civil Industrial (USM) | Magíster en Economía Aplicada (UAH & Georgetown) | Diplomado en Electromovilidad</p>
-                    <p class="text-sm text-gray-600 leading-relaxed font-light">
-                        15 años de trayectoria en el MTT. Ejerció la coordinación general de la División de Subsidios y lideró el diseño programático de perímetros de exclusión, transporte rural y planes piloto de electromovilidad a nivel nacional.
+                    <p class="text-xs font-bold text-lyv-cyan uppercase tracking-wider mb-4">Socio Asesor — Regulación &amp; Subsidios</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mb-4 font-mono">Ingeniero Civil Industrial (USM) | Magíster en Economía Aplicada (UAH &amp; Georgetown)</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                        15 años de trayectoria en el MTT. Ejerció la coordinación general de la División de Subsidios y lideró el diseño programático de perímetros de exclusión, transporte rural y planes piloto de electromovilidad regional.
                     </p>
                 </div>
             </div>
 
-            <!-- Consultor 2 -->
-            <div class="flex flex-col lg:flex-row gap-8 items-center bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all class-reveal-right">
+            <!-- Socio 2 -->
+            <div class="flex flex-col lg:flex-row gap-8 items-center bg-white dark:bg-lyv-navy/20 p-6 sm:p-8 rounded-xl border border-gray-100 dark:border-lyv-blue/10 shadow-sm class-reveal-right">
                 <div class="w-40 h-40 sm:w-44 sm:h-44 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Mitchell Langley" class="w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="Mitchell Langley" class="w-full h-full object-cover">
                 </div>
                 <div class="w-full">
                     <div class="flex items-center justify-between mb-1">
-                        <h3 class="text-2xl font-bold text-lyv-navy">Mitchell Langley</h3>
-                        <a href="#" class="text-lyv-blue hover:text-lyv-cyan transition-colors ml-4" aria-label="LinkedIn">
+                        <h3 class="text-2xl font-bold text-lyv-navy dark:text-white">Mitchell Langley</h3>
+                        <a href="#" class="text-lyv-blue hover:text-lyv-cyan dark:text-lyv-cyan transition-colors ml-4">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                         </a>
                     </div>
-                    <p class="text-xs font-bold text-lyv-cyan uppercase tracking-wider mb-4">Socio Asesor — Desarrollo Urbano & Zonas Sur</p>
-                    <p class="text-xs text-gray-400 mb-4 font-mono">Geógrafo (George Washington University) | Diplomado en Electromovilidad | Diplomado en Regulación (UAI)</p>
-                    <p class="text-sm text-gray-600 leading-relaxed font-light">
-                        Más de una década de experiencia. Destacada labor en la Unidad de Desarrollo Urbano de la DTPR, liderando marcos operativos y la puesta en marcha de exigencias tecnológicas en macrozonas (La Araucanía a Magallanes).
+                    <p class="text-xs font-bold text-lyv-cyan uppercase tracking-wider mb-4">Socio Asesor — Desarrollo Urbano &amp; Zonas Sur</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mb-4 font-mono">Geógrafo (George Washington University) | Diplomado en Electromovilidad</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                        Más de una década de experiencia. Destacada labor en la Unidad de Desarrollo Urbano de la DTPR, liderando marcos operativos e implementación de exigencias tecnológicas en macrozonas (La Araucanía a Magallanes).
                     </p>
                 </div>
             </div>
 
-            <!-- Consultor 3 -->
-            <div class="flex flex-col lg:flex-row gap-8 items-center bg-white p-6 sm:p-8 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all class-reveal-left">
+            <!-- Coordinador -->
+            <div class="flex flex-col lg:flex-row gap-8 items-center bg-white dark:bg-lyv-navy/20 p-6 sm:p-8 rounded-xl border border-gray-100 dark:border-lyv-blue/10 shadow-sm class-reveal-left">
                 <div class="w-40 h-40 sm:w-44 sm:h-44 rounded-full overflow-hidden bg-gray-200 flex-shrink-0 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Felipe Ángel Sepúlveda" class="w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="Felipe Ángel Sepúlveda" class="w-full h-full object-cover">
                 </div>
                 <div class="w-full">
                     <div class="flex items-center justify-between mb-1">
-                        <h3 class="text-2xl font-bold text-lyv-navy">Felipe Ángel Sepúlveda</h3>
-                        <a href="#" class="text-lyv-blue hover:text-lyv-cyan transition-colors ml-4" aria-label="LinkedIn">
+                        <h3 class="text-2xl font-bold text-lyv-navy dark:text-white">Felipe Ángel Sepúlveda</h3>
+                        <a href="#" class="text-lyv-blue hover:text-lyv-cyan dark:text-lyv-cyan transition-colors ml-4">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                         </a>
                     </div>
                     <p class="text-xs font-bold text-lyv-cyan uppercase tracking-wider mb-4">Coordinador de Análisis Técnico</p>
-                    <p class="text-xs text-gray-400 mb-4 font-mono">Geógrafo (PUC) | Magíster en Ingeniería de Transporte (PUCV)</p>
-                    <p class="text-sm text-gray-600 leading-relaxed font-light">
-                        14 años de trayectoria especializada en ingeniería vial y optimización. Experto en control estadístico de regularidad, rediseño de trazados urbanos regionales y la auditoría fina de plataformas tecnológicas de despacho.
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mb-4 font-mono">Geógrafo (PUC) | Magíster en Ingeniería de Transporte (PUCV)</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                        14 años de trayectoria especializada en optimización de redes. Experto en control estadístico de regularidad, rediseño de mallas de recorridos urbanos y auditoría de plataformas tecnológicas de despacho.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 7. CONTACTO (Formulario de alta conversión para Celulares y Escritorio) -->
-    <section id="contacto" class="bg-lyv-navy text-white py-24 border-t border-lyv-blue/20">
+    <!-- 7. CONTACTO -->
+    <section id="contacto" class="bg-lyv-navy text-white py-24 border-t border-lyv-blue/20 dark:bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 
-                <!-- Datos Directos -->
                 <div class="class-reveal-left flex flex-col justify-between">
                     <div>
                         <span class="text-lyv-electric uppercase tracking-widest font-bold text-xs block mb-2">Canal Formal de Consultas</span>
                         <h2 class="text-3xl font-bold mb-6">Hablemos de tu próximo desafío operacional</h2>
                         <p class="text-gray-300 mb-8 leading-relaxed font-light">
-                            Ponte en contacto de forma directa con nuestro equipo directivo para evaluar licitaciones públicas en curso, auditorías a tus sistemas GPS o planes corporativos de electromovilidad regional.
+                            Ponte en contacto de forma directa con nuestro team directivo para evaluar licitaciones públicas en curso, auditorías a tus sistemas GPS o planes corporativos de electromovilidad regional.
                         </p>
                     </div>
                     <div class="space-y-4 text-sm text-gray-300 border-t border-lyv-blue/30 pt-6">
@@ -277,23 +297,21 @@
                     </div>
                 </div>
 
-                <!-- Formulario Técnico Moderno -->
-                <div class="bg-white text-lyv-darkest p-8 rounded-lg shadow-xl class-reveal-right">
+                <div class="bg-white text-lyv-darkest p-8 rounded-lg shadow-xl class-reveal-right dark:bg-lyv-navy/40 dark:text-white border dark:border-lyv-blue/20">
                     <form action="#" method="POST" class="space-y-6">
                         <div>
-                            <label for="name" class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Nombre Completo</label>
-                            <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-lyv-cyan text-sm bg-gray-50 transition-colors" required>
+                            <label for="name" class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-300 mb-2">Nombre Completo</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-200 dark:border-lyv-blue/20 rounded focus:outline-none focus:border-lyv-cyan text-sm bg-gray-50 dark:bg-lyv-darkest/50 dark:text-white transition-colors" required>
                         </div>
                         <div>
-                            <label for="company" class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Empresa Operadora / Institución</label>
-                            <input type="text" id="company" name="company" class="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-lyv-cyan text-sm bg-gray-50 transition-colors">
+                            <label for="company" class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-300 mb-2">Empresa Operadora / Institución</label>
+                            <input type="text" id="company" name="company" class="w-full px-4 py-3 border border-gray-200 dark:border-lyv-blue/20 rounded focus:outline-none focus:border-lyv-cyan text-sm bg-gray-50 dark:bg-lyv-darkest/50 dark:text-white transition-colors">
                         </div>
                         <div>
-                            <label for="message" class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Mensaje o Requerimiento Técnico</label>
-                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-lyv-cyan text-sm bg-gray-50 transition-colors" required></textarea>
+                            <label for="message" class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-300 mb-2">Mensaje o Requerimiento Técnico</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-3 border border-gray-200 dark:border-lyv-blue/20 rounded focus:outline-none focus:border-lyv-cyan text-sm bg-gray-50 dark:bg-lyv-darkest/50 dark:text-white transition-colors" required></textarea>
                         </div>
-                        <!-- Botón 100% interactivo usando el color destacado -->
-                        <button type="submit" class="w-full bg-lyv-electric text-lyv-darkest font-bold py-4 rounded shadow hover:bg-lyv-electric/90 active:scale-[0.98] text-sm uppercase tracking-wider transition-all">Enviar Solicitud Técnica</button>
+                        <button type="submit" class="w-full bg-lyv-electric text-lyv-darkest font-bold py-4 rounded shadow hover:bg-lyv-electric/90 active:scale-[0.98] text-sm uppercase tracking-wider transition-all">Enviar Solicitud Técnico</button>
                     </form>
                 </div>
 
@@ -301,16 +319,15 @@
         </div>
     </section>
 
-    <!-- 8. FOOTER (Cierre Institucional) -->
-    <footer class="bg-lyv-darkest text-gray-500 text-xs py-8 border-t border-white/5">
+    <!-- 8. FOOTER -->
+    <footer class="bg-lyv-darkest text-gray-500 text-xs py-8 border-t border-white/5 dark:bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>&copy; 2026 Langley y Villalobos Asesorías Limitada. Todos los derechos reservados.</p>
-            <!-- Detalle sutil del logo romano al cierre -->
-            <p class="font-roman text-sm text-lyv-cyan tracking-wider">L<span class="text-xs font-sans text-gray-500">&</span>V</p>
+            <p class="font-roman text-sm text-lyv-cyan tracking-wider">L<span class="text-xs font-sans text-gray-500">&amp;V</span></p>
         </div>
     </footer>
 
-    <!-- INTERACTIVIDAD MEDIANTE JS VANILA (Ligero y compatible) -->
+    <!-- INTERACTIVIDAD Y LÓGICA DE DETECCIÓN -->
     <script>
         // Control de Menú Desplegable en Celulares
         const menuBtn = document.getElementById('menu-btn');
@@ -320,7 +337,6 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Cierre automático al tocar algún enlace dentro de celulares
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -328,9 +344,51 @@
             });
         });
 
+        // --- SISTEMA DE MODO CLARO POR DEFECTO ---
+        const toggleBtnDesktop = document.getElementById('theme-toggle');
+        const toggleBtnMobile = document.getElementById('theme-toggle-mobile');
+        
+        const sunDesktop = document.getElementById('theme-toggle-sun');
+        const moonDesktop = document.getElementById('theme-toggle-moon');
+        const sunMobile = document.getElementById('theme-toggle-sun-mobile');
+        const moonMobile = document.getElementById('theme-toggle-moon-mobile');
+
+        // Inicialización basándose estrictamente en almacenamiento local, si no existe: POR DEFECTO CLARO.
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                sunDesktop.classList.remove('hidden');
+                moonDesktop.classList.add('hidden');
+                sunMobile.classList.remove('hidden');
+                moonMobile.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunDesktop.classList.add('hidden');
+                moonDesktop.classList.remove('hidden');
+                sunMobile.classList.add('hidden');
+                moonMobile.classList.remove('hidden');
+            }
+        }
+
+        // Leer preferencia o forzar claro si es la primera visita
+        const currentTheme = localStorage.getItem('color-theme') || 'light';
+        applyTheme(currentTheme);
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('color-theme', 'light');
+                applyTheme('light');
+            } else {
+                localStorage.setItem('color-theme', 'dark');
+                applyTheme('dark');
+            }
+        }
+
+        toggleBtnDesktop.addEventListener('click', toggleTheme);
+        toggleBtnMobile.addEventListener('click', toggleTheme);
+
         // Animación suave de aparición al hacer scroll (ScrollReveal)
         ScrollReveal({ reset: false, distance: '30px', duration: 900, delay: 150 });
-
         ScrollReveal().reveal('.class-reveal-bottom', { origin: 'bottom' });
         ScrollReveal().reveal('.class-reveal-left', { origin: 'left' });
         ScrollReveal().reveal('.class-reveal-right', { origin: 'right' });
